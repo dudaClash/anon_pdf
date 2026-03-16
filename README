@@ -1,0 +1,223 @@
+📄 AnonLGPD – Anonimizador de PDFs para LGPD
+Versão 4.0
+
+Ferramenta gráfica para anonimização automática e manual de dados sensíveis em documentos PDF, desenvolvida em Python com PyMuPDF e Tkinter, com suporte opcional a OCR em português para tratamento de documentos digitalizados.
+O sistema foi projetado para auxiliar na proteção de dados pessoais e fiscais, atendendo às exigências da Lei Geral de Proteção de Dados (LGPD) em documentos administrativos, fiscais e jurídicos.
+O processamento realiza anonimização geométrica precisa no nível de palavras, evitando remoção excessiva de conteúdo textual e preservando a integridade estrutural do documento.
+O script pincipal encontra-se em:
+
+🎯 Objetivo do Sistema
+
+Automatizar o processo de remoção ou ocultação de dados sensíveis em PDFs, tais como:
+CPF
+CNPJ
+Inscrição Estadual
+CEP
+Número de processos administrativos ou judiciais
+Razão social de empresas
+Assinaturas
+Logotipos ou marcas d’água
+Imagens embutidas
+Seções de anexos
+
+O sistema permite também anonimização manual assistida, quando a identificação automática não for suficiente.
+
+🧠 Principais Funcionalidades
+1️⃣ Anonimização automática
+
+O sistema identifica automaticamente padrões sensíveis por expressões regulares e análise contextual.
+Entre os dados identificados:
+CPF
+CNPJ
+CEP
+IE/PE (com validação de dígitos verificadores)
+números de processos administrativos
+razão social de empresas
+assinaturas digitais ou físicas
+logotipos institucionais
+marcas d’água
+
+A anonimização é feita por redaction nativa do PDF, eliminando definitivamente o conteúdo.
+
+2️⃣ OCR para documentos digitalizados
+Quando o PDF contém apenas imagem (scanner), o sistema pode utilizar Tesseract OCR em português para extrair texto e permitir a anonimização.
+Configurações utilizadas:
+idioma: por
+resolução: 300 DPI
+
+3️⃣ Anonimização manual assistida
+
+Caso algum dado sensível não seja detectado automaticamente, o usuário pode:
+abrir o documento em modo visual
+selecionar manualmente trechos com o mouse
+aplicar anonimização apenas nas regiões selecionadas
+
+Esse modo é útil para:
+dados não estruturados
+textos manuscritos
+carimbos
+documentos complexos
+
+4️⃣ Anonimização personalizada
+
+O usuário pode informar strings adicionais que devem ser anonimizadas.
+
+Exemplo:
+
+123.456.789-09, 12.345.678/0001-90, 2025.000009857102-17
+
+O sistema identifica automaticamente se o termo corresponde a:
+CPF
+CNPJ
+IE
+CEP
+número de processo
+texto literal
+
+5️⃣ Remoção de elementos visuais
+
+Opcionalmente o sistema pode remover:
+
+logotipos institucionais
+marcas d’água
+imagens pequenas
+carimbos digitalizados
+
+Interface gráfica
+
+A aplicação possui interface simples baseada em Tkinter:
+
+Campos principais:
+
+PDF de entrada
+PDF de saída
+opção de OCR
+remoção de logotipos
+campo de strings adicionais
+logs de execução
+barra de progresso
+Botões disponíveis:
+Anonimização automática
+Marcação manual
+
+🧩 Arquitetura do Script
+
+O script foi dividido em módulos lógicos:
+
+1. Padrões de identificação
+
+Define expressões regulares para detectar:
+CPF
+CNPJ
+CPF
+processos
+IE
+
+2. Indexação de palavras
+
+O documento é convertido em um mapa geométrico de palavras, permitindo localizar exatamente o trecho a ser removido.
+
+3. Redaction segura
+
+O sistema utiliza:
+
+page.add_redact_annot()
+page.apply_redactions()
+
+garantindo que o conteúdo removido não possa ser recuperado.
+
+4. OCR opcional
+
+Caso não exista texto extraível, o sistema executa:
+page.get_textpage_ocr()
+
+5. Salvamento seguro
+
+O salvamento final utiliza:
+
+doc.save(deflate=True, garbage=2, linear=True) garantindo:
+
+compressão
+limpeza de objetos removidos
+otimização do PDF
+
+📦 Dependências
+
+Instalar as bibliotecas necessárias:
+
+pip install pymupdf
+
+Para suporte a OCR:
+
+instalar Tesseract OCR
+
+E garantir a presença do arquivo:
+
+por.traineddata
+📂 Estrutura recomendada
+AnonLGPD/
+│
+├── AnonLGPDvers4.0.py
+├── README.md
+│
+├── tesseract/
+│   ├── tesseract.exe
+│   └── tessdata/
+│       └── por.traineddata
+│
+└── exemplos/
+    ├── documento_original.pdf
+    └── documento_anonimizado.pdf
+
+▶️ Como executar
+python AnonLGPDvers4.0.py
+
+Abrirá a interface gráfica do anonimizar.
+
+📊 Resumo de execução
+
+Durante o processamento o sistema exibe logs como:
+
+OCR em páginas: X
+CPF anonimizado: X
+CNPJ anonimizado: X
+IE/PE anonimizada: X
+Razões sociais anonimizada(s): X
+Assinaturas removidas: X
+Imagens tratadas: X
+⚠️ Boas práticas
+
+Após a anonimização recomenda-se:
+
+revisar visualmente o PDF
+
+rodar novamente caso algum dado permaneça
+
+utilizar o modo manual quando necessário
+
+🔒 Segurança
+
+O método de anonimização utilizado remove permanentemente o conteúdo do PDF, impedindo recuperação posterior.
+Isso garante conformidade com: LGPD, boas práticas de proteção de dados e anonimização documental
+
+👨‍💻 Autoria
+
+Aplicativo desenvolvido pelo:
+
+Grupo Executivo de Ação Fiscal 2
+DRR IIRF – SEFAZ/PE
+
+Uso institucional.
+Uso comercial não autorizado.
+
+📌 Versão
+
+AnonLGPD v4.0
+
+Principais melhorias:
+
+anonimização no nível de palavras
+OCR opcional em português
+validação de IE/PE
+anonimização manual assistida
+remoção opcional de logotipos
