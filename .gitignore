@@ -1,9 +1,8 @@
-AnonLGPDvers2.2.py
-AnonLGPDvers2.3.py
-.venv
-_internal
-build
-*.bat
-*.zip
-.idea
-__pycache__
+.venv/
+__pycache__/
+*.pyc
+build/
+dist/
+.idea/
+*.log
+*.exe
